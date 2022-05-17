@@ -1,7 +1,9 @@
-package com.example.restaurantmanagementspringboot.entity;
+package com.example.restaurantmanagementspringboot.models;
+
+import com.example.restaurantmanagementspringboot.utils.ItemType;
+import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)

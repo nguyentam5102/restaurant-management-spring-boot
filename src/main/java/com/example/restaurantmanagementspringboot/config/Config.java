@@ -1,10 +1,10 @@
 package com.example.restaurantmanagementspringboot.config;
 
 import com.example.restaurantmanagementspringboot.repository.BillRepository;
-import com.example.restaurantmanagementspringboot.entity.Bill;
-import com.example.restaurantmanagementspringboot.entity.ItemType;
-import com.example.restaurantmanagementspringboot.entity.MenuItem;
-import com.example.restaurantmanagementspringboot.entity.MenuItemStatus;
+import com.example.restaurantmanagementspringboot.models.Bill;
+import com.example.restaurantmanagementspringboot.utils.ItemType;
+import com.example.restaurantmanagementspringboot.models.MenuItem;
+import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
 import com.example.restaurantmanagementspringboot.repository.MenuRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;

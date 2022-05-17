@@ -1,6 +1,6 @@
 package com.example.restaurantmanagementspringboot.service;
 
-import com.example.restaurantmanagementspringboot.entity.Bill;
+import com.example.restaurantmanagementspringboot.models.Bill;
 import com.example.restaurantmanagementspringboot.repository.BillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

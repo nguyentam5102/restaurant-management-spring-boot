@@ -1,7 +1,7 @@
 package com.example.restaurantmanagementspringboot.controller;
 
 import com.example.restaurantmanagementspringboot.service.BillService;
-import com.example.restaurantmanagementspringboot.entity.Bill;
+import com.example.restaurantmanagementspringboot.models.Bill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

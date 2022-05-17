@@ -1,4 +1,4 @@
-package com.example.restaurantmanagementspringboot.entity;
+package com.example.restaurantmanagementspringboot.models;
 
 
 public class OrderedMenuItem extends MenuItem{
