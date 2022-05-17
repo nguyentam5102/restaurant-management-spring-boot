@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table( name = "menu",
         uniqueConstraints = {
                 @UniqueConstraint(name = "menu_item_name_unique", columnNames = "name")
