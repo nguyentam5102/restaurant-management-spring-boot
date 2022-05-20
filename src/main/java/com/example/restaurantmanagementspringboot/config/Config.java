@@ -1,5 +1,6 @@
 package com.example.restaurantmanagementspringboot.config;
 
+import com.example.restaurantmanagementspringboot.models.BillDetail;
 import com.example.restaurantmanagementspringboot.repository.BillRepository;
 import com.example.restaurantmanagementspringboot.models.Bill;
 import com.example.restaurantmanagementspringboot.utils.ItemType;
@@ -40,22 +41,28 @@ public class Config {
         };
     }
 
-    @Bean("bean1")
-    @DependsOn("bean0")
-    CommandLineRunner commandLineRunner0(BillRepository billRepository, MenuRepository menuRepository){
-        return args -> {
-            Bill bill0 = new Bill(LocalDate.now(),
-                    LocalTime.now(),
-                    menuRepository.findAll()
-            );
-            Bill bill1 = new Bill(LocalDate.now(),
-                    LocalTime.now(),
-                    menuRepository.findAll()
-            );
-
-            billRepository.saveAll(
-                    List.of(bill0, bill1)
-            );
-        };
-    }
+//    @Bean("bean1")
+//    @DependsOn("bean0")
+//    CommandLineRunner commandLineRunner0(BillRepository billRepository, MenuRepository menuRepository){
+//        return args -> {
+//            BillDetail billDetail0 = new BillDetail();
+//            billDetail0.setMenuItem(menuRepository.getById(1l));
+//            billDetail0.setQuantity(2l);
+//            BillDetail billDetail1 = new BillDetail();
+//            billDetail1.setMenuItem(menuRepository.getById(2l));
+//            billDetail1.setQuantity(3l);
+//            Bill bill0 = new Bill(LocalDate.now(),
+//                    LocalTime.now(),
+//                    List.of(billDetail0,billDetail1)
+//            );
+////            Bill bill1 = new Bill(LocalDate.now(),
+////                    LocalTime.now(),
+////                    menuRepository.findAll()
+////            );
+//
+//            billRepository.saveAll(
+//                    List.of(bill0)
+//            );
+//        };
+//    }
 }

@@ -4,6 +4,7 @@ package com.example.restaurantmanagementspringboot.models;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "bill")
@@ -24,25 +25,19 @@ public class Bill {
 
     private LocalDate date;
     private LocalTime time;
-    private Double subTotal;
+    private Double total;
 
-    @ManyToMany(cascade = { CascadeType.REMOVE, CascadeType.MERGE})
-    @JoinTable(name = "bill_item",
-        joinColumns = @JoinColumn(name = "menuItem_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "bill_id", referencedColumnName = "id"))
-    private List<MenuItem> orderedMenuItems;
+    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
+    private List<BillDetail> billDetails = new ArrayList<>();
 
-    public Bill(LocalDate date, LocalTime time, List<MenuItem> orderedMenuItems) {
+    public Bill(LocalDate date, LocalTime time,Double total, List<BillDetail> billDetails) {
         this.date = date;
         this.time = time;
-        this.subTotal = subTotal;
-        this.orderedMenuItems = orderedMenuItems;
+        this.total = total;
+        this.billDetails = billDetails;
     }
 
-    public Bill() {}
-
-    public Long getId() {
-        return id;
+    public Bill() {
     }
 
     public LocalDate getDate() {
@@ -61,19 +56,19 @@ public class Bill {
         this.time = time;
     }
 
-    public Double getSubTotal() {
-        return subTotal;
+    public Double getTotal() {
+        return total;
     }
 
-    public void setSubTotal(Double subTotal) {
-        this.subTotal = subTotal;
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
-    public List<MenuItem> getOrderedMenuItems() {
-        return orderedMenuItems;
+    public List<BillDetail> getBillDetails() {
+        return billDetails;
     }
 
-    public void setOrderedMenuItems(List<MenuItem> orderedMenuItems) {
-        this.orderedMenuItems = orderedMenuItems;
+    public void setBillDetails(List<BillDetail> billDetails) {
+        this.billDetails = billDetails;
     }
 }

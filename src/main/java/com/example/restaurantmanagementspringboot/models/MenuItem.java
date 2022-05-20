@@ -4,10 +4,11 @@ import com.example.restaurantmanagementspringboot.utils.ItemType;
 import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@Table( name = "menu",
+@Table( name = "menuItem",
         uniqueConstraints = {
                 @UniqueConstraint(name = "menu_item_name_unique", columnNames = "name")
         }
@@ -32,6 +33,9 @@ public class MenuItem {
     private Double price;
     private MenuItemStatus status = MenuItemStatus.ENABLED;
 
+    @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL)
+    private List<BillDetail> billDetails = new ArrayList<>();
+
     public MenuItem(ItemType type, String name, String description, String imgUrl, Double price, MenuItemStatus menuItemStatus) {
         this.type = type;
         this.name = name;
@@ -47,10 +51,6 @@ public class MenuItem {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public ItemType getType() {
