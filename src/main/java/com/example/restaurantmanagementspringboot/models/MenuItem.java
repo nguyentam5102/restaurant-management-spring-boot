@@ -8,23 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table( name = "menuItem",
+@Table(name = "menuItem",
         uniqueConstraints = {
                 @UniqueConstraint(name = "menu_item_name_unique", columnNames = "name")
         }
-        )
+)
 public class MenuItem {
 
     @Id
-    @SequenceGenerator(
-            name = "menuItem_sequence",
-            sequenceName = "menuItem_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "menuItem_sequence"
+            strategy = GenerationType.IDENTITY
     )
+    @Column(name = "menu_item_id")
     private Long id;
     private ItemType type;
     private String name;
@@ -51,6 +46,14 @@ public class MenuItem {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setBillDetails(List<BillDetail> billDetails) {
+        this.billDetails = billDetails;
     }
 
     public ItemType getType() {

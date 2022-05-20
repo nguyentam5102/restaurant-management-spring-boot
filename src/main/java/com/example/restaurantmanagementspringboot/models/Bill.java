@@ -12,15 +12,10 @@ import java.util.List;
 public class Bill {
 
     @Id
-    @SequenceGenerator(
-            name = "bill_sequence",
-            sequenceName = "bill_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "bill_sequence"
+            strategy = GenerationType.IDENTITY
     )
+    @Column(name = "bill_id")
     private Long id;
 
     private LocalDate date;
@@ -38,6 +33,27 @@ public class Bill {
     }
 
     public Bill() {
+    }
+
+    public Bill(LocalDate date, LocalTime time) {
+        this.date = date;
+        this.time = time;
+    }
+
+    public Double countTotal() {
+        Double total = 0d;
+        for (BillDetail billDetail : this.getBillDetails()){
+            total += billDetail.getSubtotal();
+        }
+        return total;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate getDate() {
@@ -70,5 +86,9 @@ public class Bill {
 
     public void setBillDetails(List<BillDetail> billDetails) {
         this.billDetails = billDetails;
+    }
+
+    public void addBillDetail(BillDetail newBillDetail) {
+        this.billDetails.add(newBillDetail);
     }
 }

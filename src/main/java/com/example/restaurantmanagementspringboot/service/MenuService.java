@@ -20,8 +20,8 @@ public class MenuService {
         this.menuRepository = menuRepository;
     }
 
-    public Optional<MenuItem> getMenuItemById(Long studentId) {
-        return menuRepository.findById(studentId);
+    public Optional<MenuItem> getMenuItemById(Long menuItemId){
+        return menuRepository.findById(menuItemId);
     }
 
     public List<MenuItem> getMenuItems(String status) {
