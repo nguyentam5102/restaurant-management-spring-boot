@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -36,5 +37,9 @@ public class CustomerService {
                 !Objects.equals(customer.getPhone(), phone))
             customer.setPhone(phone);
         customer.setPhone(phone);
+    }
+
+    public List<Customer> getCustomers() {
+        return customerRepository.findAll();
     }
 }

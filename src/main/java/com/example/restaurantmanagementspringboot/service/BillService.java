@@ -73,7 +73,6 @@ public class BillService {
 
     @Transactional
     public void updateBillDetail(Long billId, Long menuItemId, Long newQuantity) {
-
         BillDetail billDetail = billDetailRepository.findBillDetailByBillIDAndMenuItemId(billId, menuItemId)
                 .orElseThrow(() -> new IllegalStateException("Bill detail not found"));
         Bill billToUpdate = billRepository.getById(billId);
