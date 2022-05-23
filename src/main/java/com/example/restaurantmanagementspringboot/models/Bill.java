@@ -44,12 +44,12 @@ public class Bill {
         this.time = time;
     }
 
-    public Double countTotal() {
+    public void countTotal() {
         Double total = 0d;
         for (BillDetail billDetail : this.getBillDetails()){
             total += billDetail.getSubtotal();
         }
-        return total;
+        this.setTotal(total);
     }
 
     public Long getId() {
@@ -102,5 +102,14 @@ public class Bill {
 
     public void addBillDetail(BillDetail newBillDetail) {
         this.billDetails.add(newBillDetail);
+    }
+
+    public void removeBillDetail(BillDetail billDetailToRemove) {
+        for (int i = 0; i < billDetails.size(); i++)
+            if (billDetailToRemove.getMenuItem().getId() ==
+                    billDetails.get(i).getMenuItem().getId()) {
+                billDetails.remove(i);
+                return;
+            }
     }
 }

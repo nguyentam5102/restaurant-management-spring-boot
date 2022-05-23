@@ -27,6 +27,14 @@ public class BillController {
         billService.addNewBill(bill);
     }
 
+    @PutMapping(path = "/detail_update/{billId}")
+    public void updateBillDetail(@PathVariable("billId") Long billId,
+                                 @RequestParam Long menuItemId,
+                                 @RequestParam Long newQuantity){
+        billService.updateBillDetail(billId, menuItemId, newQuantity);
+
+    }
+
     @DeleteMapping(path = "{billId}")
     public void deleteMenuItem(@PathVariable("billId") Long billId) {
         billService.deleteBill(billId);

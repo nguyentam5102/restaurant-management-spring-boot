@@ -12,7 +12,7 @@ public class BillDetail {
     private BillMenuItemID billMenuItemID = new BillMenuItemID();
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne //(cascade = CascadeType.REFRESH)
     @MapsId("billId")
     @JoinColumn(name = "bill_id")
     private Bill bill;
@@ -69,5 +69,9 @@ public class BillDetail {
 
     public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public void countSubtotal(){
+        this.setSubtotal(this.menuItem.getPrice() * this.getQuantity());
     }
 }
