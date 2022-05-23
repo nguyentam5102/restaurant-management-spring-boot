@@ -47,7 +47,7 @@ public class BillService {
             Customer customer = customerRepository.findByPhone(phone).get();
             newBill.setCustomer(customer);
         } catch (Exception e) {
-            customerRepository.save(new Customer("Noname", phone));
+            customerRepository.save(new Customer("Unnamed", phone));
             newBill.setCustomer(customerRepository.findByPhone(phone).get());
         }
 
