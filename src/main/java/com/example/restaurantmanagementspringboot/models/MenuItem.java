@@ -2,6 +2,7 @@ package com.example.restaurantmanagementspringboot.models;
 
 import com.example.restaurantmanagementspringboot.utils.ItemType;
 import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class MenuItem {
     private Double price;
     private MenuItemStatus status = MenuItemStatus.ENABLED;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL)
     private List<BillDetail> billDetails = new ArrayList<>();
 
@@ -104,4 +106,10 @@ public class MenuItem {
         this.status = status;
     }
 
+    public void switchStatus() {
+        if (this.getStatus() == MenuItemStatus.ENABLED)
+            this.setStatus(MenuItemStatus.DISABLED);
+        else
+            this.setStatus(MenuItemStatus.ENABLED);
+    }
 }

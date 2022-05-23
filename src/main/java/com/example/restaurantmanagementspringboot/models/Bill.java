@@ -22,6 +22,10 @@ public class Bill {
     private LocalTime time;
     private Double total;
 
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
     private List<BillDetail> billDetails = new ArrayList<>();
 
@@ -70,6 +74,14 @@ public class Bill {
 
     public void setTime(LocalTime time) {
         this.time = time;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Double getTotal() {

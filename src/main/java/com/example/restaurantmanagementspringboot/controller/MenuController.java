@@ -40,10 +40,14 @@ public class MenuController {
 
     @PutMapping(path = "{menuItemId}")
     public void updateMenuItem(
-            @PathVariable("menuItemId") Long studentId,
+            @PathVariable("menuItemId") Long menuItemId,
             @RequestParam(required = false) String description,
-            @RequestParam(required = false) Double price,
-            @RequestParam(required = false) MenuItemStatus status) {
-        menuService.updateStudent(studentId, description, price, status);
+            @RequestParam(required = false) Double price) {
+        menuService.updateMenuItem(menuItemId, description, price);
+    }
+
+    @PutMapping(path = "switch/{menuItemId}")
+    public void switchMenuItemStatus(@PathVariable("menuItemId") Long menuItemId){
+        menuService.switchStatus(menuItemId);
     }
 }

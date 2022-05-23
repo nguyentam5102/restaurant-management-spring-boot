@@ -44,9 +44,9 @@ public class MenuService {
     }
 
     @Transactional
-    public void updateStudent(Long menuItemId, String description, Double price, MenuItemStatus status) {
+    public void updateMenuItem(Long menuItemId, String description, Double price) {
         MenuItem menuItem = menuRepository.findById(menuItemId)
-                .orElseThrow(() -> new IllegalStateException("Student with ID"
+                .orElseThrow(() -> new IllegalStateException("Item with ID"
                         + menuItemId + " does not exist"));
         if (description != null &&
                 description.length() > 0 &&
@@ -57,7 +57,14 @@ public class MenuService {
                 price > 0 &&
                 !Objects.equals(menuItem.getPrice(), price))
             menuItem.setPrice(price);
-        menuItem.setStatus(status);
 
+    }
+
+    @Transactional
+    public void switchStatus(Long menuItemId) {
+        MenuItem menuItem = menuRepository.findById(menuItemId)
+                .orElseThrow(() -> new IllegalStateException("Item with ID"
+                        + menuItemId + " does not exist"));
+       menuItem.switchStatus();
     }
 }

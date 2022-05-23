@@ -1,13 +1,17 @@
 package com.example.restaurantmanagementspringboot.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "bill_detail")
 public class BillDetail {
     @EmbeddedId
+    @JsonIgnore
     private BillMenuItemID billMenuItemID = new BillMenuItemID();
 
+    @JsonIgnore
     @ManyToOne
     @MapsId("billId")
     @JoinColumn(name = "bill_id")
