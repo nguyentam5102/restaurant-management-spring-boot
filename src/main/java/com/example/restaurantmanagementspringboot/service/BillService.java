@@ -16,6 +16,7 @@ import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BillService {
@@ -38,7 +39,7 @@ public class BillService {
     }
 
 
-    public void addNewBill(Bill bill) {
+    public Long addNewBill(Bill bill) {
         // Generate bill's date and time
         Bill newBill = new Bill(LocalDate.now(), LocalTime.now());
         String phone = bill.getCustomer().getPhone();
@@ -64,7 +65,8 @@ public class BillService {
         newBill.countTotal();
 
         // Save bill
-        billRepository.save(newBill);
+        Bill createdBill = billRepository.save(newBill);
+        return createdBill.getId();
 
     }
 
@@ -89,5 +91,9 @@ public class BillService {
         }
         billToUpdate.countTotal();
 
+    }
+
+    public Optional<Bill> getBillById(Long billId) {
+        return billRepository.findById(billId);
     }
 }

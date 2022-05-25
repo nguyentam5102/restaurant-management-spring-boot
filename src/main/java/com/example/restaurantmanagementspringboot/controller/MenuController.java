@@ -41,11 +41,6 @@ public class MenuController {
         return ResponseEntity.created(location).build();
     }
 
-    @DeleteMapping(path = "{menuItemId}")
-    public void deleteMenuItem(@PathVariable("menuItemId") Long menuItemId) {
-        menuService.deleteMenuItem(menuItemId);
-    }
-
     @PutMapping(path = "{menuItemId}")
     public ResponseEntity<HttpStatus> updateMenuItem(
             @PathVariable("menuItemId") Long menuItemId,
@@ -60,4 +55,6 @@ public class MenuController {
         menuService.switchStatus(menuItemId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
 }
