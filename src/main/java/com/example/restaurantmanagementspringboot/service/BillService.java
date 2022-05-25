@@ -1,9 +1,9 @@
 package com.example.restaurantmanagementspringboot.service;
 
-import com.example.restaurantmanagementspringboot.models.Bill;
-import com.example.restaurantmanagementspringboot.models.BillDetail;
-import com.example.restaurantmanagementspringboot.models.Customer;
-import com.example.restaurantmanagementspringboot.models.MenuItem;
+import com.example.restaurantmanagementspringboot.model.Bill;
+import com.example.restaurantmanagementspringboot.model.BillDetail;
+import com.example.restaurantmanagementspringboot.model.Customer;
+import com.example.restaurantmanagementspringboot.model.MenuItem;
 import com.example.restaurantmanagementspringboot.repository.BillDetailRepository;
 import com.example.restaurantmanagementspringboot.repository.BillRepository;
 import com.example.restaurantmanagementspringboot.repository.CustomerRepository;

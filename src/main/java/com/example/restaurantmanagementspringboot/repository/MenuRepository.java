@@ -1,6 +1,6 @@
 package com.example.restaurantmanagementspringboot.repository;
 
-import com.example.restaurantmanagementspringboot.models.MenuItem;
+import com.example.restaurantmanagementspringboot.model.MenuItem;
 import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

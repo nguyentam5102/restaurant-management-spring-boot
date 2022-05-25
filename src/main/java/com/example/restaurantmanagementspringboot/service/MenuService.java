@@ -1,6 +1,6 @@
 package com.example.restaurantmanagementspringboot.service;
 
-import com.example.restaurantmanagementspringboot.models.MenuItem;
+import com.example.restaurantmanagementspringboot.model.MenuItem;
 import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
 import com.example.restaurantmanagementspringboot.repository.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;

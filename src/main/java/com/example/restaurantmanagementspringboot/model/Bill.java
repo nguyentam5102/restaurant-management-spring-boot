@@ -1,4 +1,4 @@
-package com.example.restaurantmanagementspringboot.models;
+package com.example.restaurantmanagementspringboot.model;
 
 
 import javax.persistence.*;

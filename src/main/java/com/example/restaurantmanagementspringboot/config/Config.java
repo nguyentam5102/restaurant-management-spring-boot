@@ -1,19 +1,13 @@
 package com.example.restaurantmanagementspringboot.config;
 
-import com.example.restaurantmanagementspringboot.models.BillDetail;
-import com.example.restaurantmanagementspringboot.repository.BillRepository;
-import com.example.restaurantmanagementspringboot.models.Bill;
 import com.example.restaurantmanagementspringboot.utils.ItemType;
-import com.example.restaurantmanagementspringboot.models.MenuItem;
+import com.example.restaurantmanagementspringboot.model.MenuItem;
 import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
 import com.example.restaurantmanagementspringboot.repository.MenuRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Configuration

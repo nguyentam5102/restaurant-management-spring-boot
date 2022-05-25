@@ -1,7 +1,7 @@
 package com.example.restaurantmanagementspringboot.repository;
 
-import com.example.restaurantmanagementspringboot.models.BillDetail;
-import com.example.restaurantmanagementspringboot.models.BillMenuItemID;
+import com.example.restaurantmanagementspringboot.model.BillDetail;
+import com.example.restaurantmanagementspringboot.model.BillMenuItemID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
