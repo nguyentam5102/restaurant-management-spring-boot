@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -23,9 +25,13 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
+    public Optional<Customer> getCustomerById(Long customerId) {
+        return customerRepository.findById(customerId);
+    }
+
     @Transactional
     public void updateCustomer(Long customerId, String name, String phone) {
-        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new IllegalStateException("Customer with ID"
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new EntityNotFoundException("Customer with ID"
                 + customerId + " does not exist"));
         if (name != null &&
                 name.length() > 0 &&
@@ -41,5 +47,9 @@ public class CustomerService {
 
     public List<Customer> getCustomers() {
         return customerRepository.findAll();
+    }
+
+    public Optional<Customer> getCustomerByPhone(String customerPhone) {
+        return customerRepository.findByPhone(customerPhone);
     }
 }

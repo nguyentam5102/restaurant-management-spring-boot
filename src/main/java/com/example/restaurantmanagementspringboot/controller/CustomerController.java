@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/customer")
@@ -19,7 +20,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public void registerNewCustomer(@RequestBody Customer customer){
+    public void registerNewCustomer(@RequestBody Customer customer) {
         customerService.addNewCustomer(customer);
     }
 
@@ -28,12 +29,22 @@ public class CustomerController {
         return customerService.getCustomers();
     }
 
-    @PutMapping(path = "{customerId}")
+    @GetMapping(path = "byId/{customerId}")
+    public Optional<Customer> getCustomerById(@PathVariable("customerId") Long customerId) {
+        return customerService.getCustomerById(customerId);
+    }
+
+    @GetMapping(path = "byPhone/{customerPhone}")
+    public Optional<Customer> getCustomerByPhone(@PathVariable("customerPhone") String customerPhone) {
+        return customerService.getCustomerByPhone(customerPhone);
+    }
+
+    @PutMapping(path = "update/{customerId}")
     public void updateCustomer(
             @PathVariable("customerId") Long customerId,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String phone
-    ){
+    ) {
         customerService.updateCustomer(customerId, name, phone);
     }
 }

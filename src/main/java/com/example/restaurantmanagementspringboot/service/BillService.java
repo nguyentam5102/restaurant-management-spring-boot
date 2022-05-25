@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -68,13 +69,14 @@ public class BillService {
     }
 
     public void deleteBill(Long billId) {
+        menuRepository.findById(billId); // check if exists
         billRepository.deleteById(billId);
     }
 
     @Transactional
     public void updateBillDetail(Long billId, Long menuItemId, Long newQuantity) {
-        BillDetail billDetail = billDetailRepository.findBillDetailByBillIDAndMenuItemId(billId, menuItemId)
-                .orElseThrow(() -> new IllegalStateException("Bill detail not found"));
+        BillDetail billDetail = billDetailRepository.findBillDetailByBillIdAndMenuItemId(billId, menuItemId)
+                .orElseThrow(() -> new EntityNotFoundException("Bill detail not found"));
         Bill billToUpdate = billRepository.getById(billId);
 
         if (newQuantity > 0) {

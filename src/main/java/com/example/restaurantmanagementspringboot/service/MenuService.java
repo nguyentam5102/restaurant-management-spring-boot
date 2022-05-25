@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,14 +32,15 @@ public class MenuService {
     }
 
 
-    public void addNewMenuItem(MenuItem menuItem) {
-        menuRepository.save(menuItem);
+    public Long addNewMenuItem(MenuItem menuItem) {
+        MenuItem createdMenuItem = menuRepository.save(menuItem);
+        return createdMenuItem.getId();
     }
 
     public void deleteMenuItem(Long menuItemId) {
         boolean exists = menuRepository.existsById(menuItemId);
         if (!exists)
-            throw new IllegalStateException(
+            throw new EntityNotFoundException(
                     "Item with ID " + menuItemId + " does not exist!");
         menuRepository.deleteById(menuItemId);
     }
@@ -46,7 +48,7 @@ public class MenuService {
     @Transactional
     public void updateMenuItem(Long menuItemId, String description, Double price) {
         MenuItem menuItem = menuRepository.findById(menuItemId)
-                .orElseThrow(() -> new IllegalStateException("Item with ID"
+                .orElseThrow(() -> new EntityNotFoundException("Item with ID"
                         + menuItemId + " does not exist"));
         if (description != null &&
                 description.length() > 0 &&
@@ -63,7 +65,7 @@ public class MenuService {
     @Transactional
     public void switchStatus(Long menuItemId) {
         MenuItem menuItem = menuRepository.findById(menuItemId)
-                .orElseThrow(() -> new IllegalStateException("Item with ID"
+                .orElseThrow(() -> new EntityNotFoundException("Item with ID"
                         + menuItemId + " does not exist"));
        menuItem.switchStatus();
     }

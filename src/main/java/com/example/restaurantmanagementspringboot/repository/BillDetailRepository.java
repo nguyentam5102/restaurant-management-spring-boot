@@ -13,5 +13,5 @@ public interface BillDetailRepository extends JpaRepository<BillDetail, BillMenu
 
     @Query("SELECT billDetail FROM BillDetail billDetail WHERE billDetail.bill.id = ?1" +
             " and billDetail.menuItem.id = ?2 ")
-    Optional<BillDetail> findBillDetailByBillIDAndMenuItemId(Long billId, Long menuItemId);
+    Optional<BillDetail> findBillDetailByBillIdAndMenuItemId(Long billId, Long menuItemId);
 }
