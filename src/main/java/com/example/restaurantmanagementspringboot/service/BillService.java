@@ -39,6 +39,7 @@ public class BillService {
     }
 
 
+    @Transactional
     public Long addNewBill(Bill bill) {
         // Generate bill's date and time
         Bill newBill = new Bill(LocalDate.now(), LocalTime.now());
@@ -79,6 +80,7 @@ public class BillService {
     public void updateBillDetail(Long billId, Long menuItemId, Long newQuantity) {
         BillDetail billDetail = billDetailRepository.findBillDetailByBillIdAndMenuItemId(billId, menuItemId)
                 .orElseThrow(() -> new EntityNotFoundException("Bill detail not found"));
+
         Bill billToUpdate = billRepository.getById(billId);
 
         if (newQuantity > 0) {

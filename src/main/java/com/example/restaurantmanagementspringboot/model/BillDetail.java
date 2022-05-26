@@ -12,7 +12,7 @@ public class BillDetail {
     private BillMenuItemID billMenuItemID = new BillMenuItemID();
 
     @JsonIgnore
-    @ManyToOne //(cascade = CascadeType.REFRESH)
+    @ManyToOne
     @MapsId("billId")
     @JoinColumn(name = "bill_id")
     private Bill bill;
