@@ -33,7 +33,6 @@ public class BillService {
         this.billDetailRepository = billDetailRepository;
     }
 
-
     public List<Bill> getBills() {
         return billRepository.findAll();
     }
