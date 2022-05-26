@@ -21,9 +21,6 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public void addNewCustomer(Customer customer) {
-        customerRepository.save(customer);
-    }
 
     public Optional<Customer> getCustomerById(Long customerId) {
         return customerRepository.findById(customerId);
