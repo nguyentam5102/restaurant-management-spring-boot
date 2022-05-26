@@ -29,7 +29,7 @@ public class Bill {
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
     private List<BillDetail> billDetails = new ArrayList<>();
 
-    public Bill(LocalDate date, LocalTime time,Double total, List<BillDetail> billDetails) {
+    public Bill(LocalDate date, LocalTime time, Double total, List<BillDetail> billDetails) {
         this.date = date;
         this.time = time;
         this.total = total;
@@ -46,7 +46,7 @@ public class Bill {
 
     public void countTotal() {
         Double total = 0d;
-        for (BillDetail billDetail : this.getBillDetails()){
+        for (BillDetail billDetail : this.getBillDetails()) {
             total += billDetail.getSubtotal();
         }
         this.setTotal(total);

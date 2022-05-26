@@ -1,8 +1,8 @@
 package com.example.restaurantmanagementspringboot.service;
 
 import com.example.restaurantmanagementspringboot.model.MenuItem;
-import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
 import com.example.restaurantmanagementspringboot.repository.MenuRepository;
+import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ public class MenuService {
         this.menuRepository = menuRepository;
     }
 
-    public Optional<MenuItem> getMenuItemById(Long menuItemId){
+    public Optional<MenuItem> getMenuItemById(Long menuItemId) {
         return menuRepository.findById(menuItemId);
     }
 
@@ -67,6 +67,6 @@ public class MenuService {
         MenuItem menuItem = menuRepository.findById(menuItemId)
                 .orElseThrow(() -> new EntityNotFoundException("Item with ID"
                         + menuItemId + " does not exist"));
-       menuItem.switchStatus();
+        menuItem.switchStatus();
     }
 }

@@ -71,7 +71,7 @@ public class BillDetail {
         this.subtotal = subtotal;
     }
 
-    public void countSubtotal(){
+    public void countSubtotal() {
         this.setSubtotal(this.menuItem.getPrice() * this.getQuantity());
     }
 }

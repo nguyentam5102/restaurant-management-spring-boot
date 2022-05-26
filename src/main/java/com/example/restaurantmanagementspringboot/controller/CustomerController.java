@@ -3,6 +3,8 @@ package com.example.restaurantmanagementspringboot.controller;
 import com.example.restaurantmanagementspringboot.model.Customer;
 import com.example.restaurantmanagementspringboot.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,22 +26,27 @@ public class CustomerController {
         return customerService.getCustomers();
     }
 
-    @GetMapping(path = "byId/{customerId}")
-    public Optional<Customer> getCustomerById(@PathVariable("customerId") Long customerId) {
-        return customerService.getCustomerById(customerId);
+
+    @GetMapping(path = "{menuItemId}")
+    public ResponseEntity<Optional<Customer>> getCustomerById(@PathVariable("customerId") Long customerId) {
+        return new ResponseEntity<>(customerService.getCustomerById(customerId), HttpStatus.OK);
     }
 
+
     @GetMapping(path = "byPhone/{customerPhone}")
-    public Optional<Customer> getCustomerByPhone(@PathVariable("customerPhone") String customerPhone) {
-        return customerService.getCustomerByPhone(customerPhone);
+    public ResponseEntity<Optional<Customer>> getCustomerByPhone(@PathVariable("customerPhone") String customerPhone) {
+        return new ResponseEntity<>(customerService.getCustomerByPhone(customerPhone), HttpStatus.OK);
     }
 
     @PutMapping(path = "update/{customerId}")
-    public void updateCustomer(
+    public ResponseEntity<HttpStatus> updateCustomer(
             @PathVariable("customerId") Long customerId,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String phone
     ) {
         customerService.updateCustomer(customerId, name, phone);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
 }

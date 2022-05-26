@@ -16,5 +16,6 @@ public interface MenuRepository extends JpaRepository<MenuItem, Long> {
     Optional<MenuItem> findMenuItemByName(String name);
 
     List<MenuItem> findByStatus(MenuItemStatus menuItemStatus);
+
     Optional<MenuItem> findById(Long id);
 }

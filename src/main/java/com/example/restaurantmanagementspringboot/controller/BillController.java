@@ -1,7 +1,7 @@
 package com.example.restaurantmanagementspringboot.controller;
 
-import com.example.restaurantmanagementspringboot.service.BillService;
 import com.example.restaurantmanagementspringboot.model.Bill;
+import com.example.restaurantmanagementspringboot.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +42,8 @@ public class BillController {
 
     @PutMapping(path = "/detail_update/{billId}")
     public ResponseEntity<HttpStatus> updateBillDetail(@PathVariable("billId") Long billId,
-                                                   @RequestParam Long menuItemId,
-                                                   @RequestParam Long newQuantity){
+                                                       @RequestParam Long menuItemId,
+                                                       @RequestParam Long newQuantity) {
         billService.updateBillDetail(billId, menuItemId, newQuantity);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
@@ -53,4 +53,6 @@ public class BillController {
     public void deleteMenuItem(@PathVariable("billId") Long billId) {
         billService.deleteBill(billId);
     }
+
+
 }
