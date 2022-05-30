@@ -1,12 +1,12 @@
 package com.example.restaurantmanagementspringboot.service;
 
+import com.example.restaurantmanagementspringboot.exception.ResourceNotFoundException;
 import com.example.restaurantmanagementspringboot.model.Customer;
 import com.example.restaurantmanagementspringboot.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,8 +22,9 @@ public class CustomerService implements ICustomerService {
     }
 
 
-    public Optional<Customer> getCustomerById(Long customerId) {
-        return customerRepository.findById(customerId);
+    public Customer getCustomerById(Long customerId) {
+        return customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Item with ID "
+                + customerId + " does not exist"));
     }
 
     public List<Customer> getCustomers() {
@@ -36,7 +37,7 @@ public class CustomerService implements ICustomerService {
 
     @Transactional
     public void updateCustomer(Long customerId, String name, String phone) {
-        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new EntityNotFoundException("Customer with ID"
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Customer with ID "
                 + customerId + " does not exist"));
         if (name != null &&
                 name.length() > 0 &&
@@ -48,5 +49,6 @@ public class CustomerService implements ICustomerService {
                 !Objects.equals(customer.getPhone(), phone))
             customer.setPhone(phone);
         customer.setPhone(phone);
+
     }
 }

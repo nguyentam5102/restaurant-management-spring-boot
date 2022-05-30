@@ -1,7 +1,7 @@
 package com.example.restaurantmanagementspringboot.controller;
 
 import com.example.restaurantmanagementspringboot.model.Customer;
-import com.example.restaurantmanagementspringboot.service.CustomerService;
+import com.example.restaurantmanagementspringboot.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +14,10 @@ import java.util.Optional;
 @RequestMapping("api/v1/customer")
 public class CustomerController {
 
-    private final CustomerService customerService;
+    private final ICustomerService customerService;
 
     @Autowired
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(ICustomerService customerService) {
         this.customerService = customerService;
     }
 
@@ -28,7 +28,7 @@ public class CustomerController {
 
 
     @GetMapping(path = "{customerId}")
-    public ResponseEntity<Optional<Customer>> getCustomerById(@PathVariable("customerId") Long customerId) {
+    public ResponseEntity<Customer> getCustomerById(@PathVariable("customerId") Long customerId) {
         return new ResponseEntity<>(customerService.getCustomerById(customerId), HttpStatus.OK);
     }
 

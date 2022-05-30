@@ -1,5 +1,6 @@
 package com.example.restaurantmanagementspringboot.service;
 
+import com.example.restaurantmanagementspringboot.exception.ResourceNotFoundException;
 import com.example.restaurantmanagementspringboot.model.Bill;
 import com.example.restaurantmanagementspringboot.model.BillDetail;
 import com.example.restaurantmanagementspringboot.model.Customer;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -37,8 +37,9 @@ public class BillService implements IBillService {
         return billRepository.findAll();
     }
 
-    public Optional<Bill> getBillById(Long billId) {
-        return billRepository.findById(billId);
+    public Bill getBillById(Long billId) {
+        return billRepository.findById(billId).orElseThrow(() ->
+                new ResourceNotFoundException("Bill with ID " + billId + " does not exist"));
     }
 
     @Transactional
@@ -69,16 +70,20 @@ public class BillService implements IBillService {
     }
 
     public void deleteBill(Long billId) {
-        menuRepository.findById(billId); // check if exists
+        billRepository.findById(billId).orElseThrow(() ->
+                new ResourceNotFoundException("Bill with ID " + billId + " does not exist")); // check if exists
         billRepository.deleteById(billId);
     }
 
     @Transactional
     public void updateBillDetail(Long billId, Long menuItemId, Long newQuantity) {
         BillDetail billDetail = billDetailRepository.findBillDetailByBillIdAndMenuItemId(billId, menuItemId)
-                .orElseThrow(() -> new EntityNotFoundException("Bill detail not found"));
+                .orElseThrow(() -> new ResourceNotFoundException
+                        ("Bill detail with Bill/Item IDs: " + billId + "/" + menuItemId
+                                + " not found"));
 
-        Bill billToUpdate = billRepository.getById(billId);
+        Bill billToUpdate = billRepository.findById(billId).orElseThrow(
+                () -> new ResourceNotFoundException("Bill with ID " + billId + " does not exist"));
 
         if (newQuantity > 0) {
             billDetail.setQuantity(newQuantity);
@@ -92,10 +97,12 @@ public class BillService implements IBillService {
 
     }
 
-    private void fillBillDetailsOfNewBill(Bill newBill, List<BillDetail> newBillDetails) {
+    private void fillBillDetailsOfNewBill(Bill newBill, List<BillDetail> newBillDetails) throws ResourceNotFoundException {
         for (BillDetail newBillDetail : newBillDetails) {
             newBillDetail.setBill(newBill);
-            MenuItem menuItem = menuRepository.getById(newBillDetail.getMenuItem().getId());
+            MenuItem menuItem = menuRepository.findById(newBillDetail.getMenuItem().getId()).orElseThrow((() -> new ResourceNotFoundException
+                    ("Item with ID "
+                            + newBillDetail.getMenuItem().getId() + " does not exist")));
             newBillDetail.setMenuItem(menuItem);
             newBill.addBillDetail(newBillDetail);
             newBillDetail.countSubtotal();

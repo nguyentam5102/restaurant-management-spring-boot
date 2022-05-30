@@ -1,7 +1,7 @@
 package com.example.restaurantmanagementspringboot.controller;
 
 import com.example.restaurantmanagementspringboot.model.Bill;
-import com.example.restaurantmanagementspringboot.service.BillService;
+import com.example.restaurantmanagementspringboot.service.IBillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,15 +10,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/bill")
 public class BillController {
-    private final BillService billService;
+    private final IBillService billService;
 
     @Autowired
-    public BillController(BillService billService) {
+    public BillController(IBillService billService) {
         this.billService = billService;
     }
 
@@ -28,7 +27,7 @@ public class BillController {
     }
 
     @GetMapping(path = "{billId}")
-    public ResponseEntity<Optional<Bill>> getMenuItemById(@PathVariable("billId") Long billId) {
+    public ResponseEntity<Bill> getMenuItemById(@PathVariable("billId") Long billId) {
         return new ResponseEntity<>(billService.getBillById(billId), HttpStatus.OK);
     }
 
