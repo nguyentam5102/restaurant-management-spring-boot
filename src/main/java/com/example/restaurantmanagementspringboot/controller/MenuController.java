@@ -12,7 +12,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/menu")
+@RequestMapping(path = "api/menu")
 public class MenuController {
 
     private final IMenuService menuService;
@@ -22,25 +22,30 @@ public class MenuController {
         this.menuService = menuService;
     }
 
-    @GetMapping
+    @GetMapping("getItems")
     public ResponseEntity<List<MenuItem>> getMenuItems(@RequestParam(required = false) String status) {
         return new ResponseEntity<>(menuService.getMenuItems(status), HttpStatus.OK);
     }
 
-    @GetMapping(path = "{menuItemId}")
+    @GetMapping(path = "getItemById/{menuItemId}")
     public ResponseEntity<MenuItem> getMenuItemById(@PathVariable("menuItemId") Long menuItemId) {
         return new ResponseEntity<>(menuService.getMenuItemById(menuItemId), HttpStatus.OK);
     }
 
+    @GetMapping(path = "getItemByType/{itemType}")
+    public ResponseEntity<List<MenuItem>> getMenuItemsByType(@PathVariable("itemType") String itemType) {
+        return new ResponseEntity<>(menuService.getMenuItemsByType(itemType), HttpStatus.OK);
+    }
+
     @PostMapping
-    public ResponseEntity<Object> registerNewMenuItem(@RequestBody MenuItem menuItem) {
+    public ResponseEntity<Object> addNewMenuItem(@RequestBody MenuItem menuItem) {
         Long menuItemId = menuService.addNewMenuItem(menuItem);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}").buildAndExpand(menuItemId).toUri();
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping(path = "{menuItemId}")
+    @PutMapping(path = "update/{menuItemId}")
     public ResponseEntity<HttpStatus> updateMenuItem(
             @PathVariable("menuItemId") Long menuItemId,
             @RequestParam(required = false) String description,
@@ -53,7 +58,7 @@ public class MenuController {
         }
     }
 
-    @PutMapping(path = "switch/{menuItemId}")
+    @PutMapping(path = "switchItemStatusById/{menuItemId}")
     public ResponseEntity<HttpStatus> switchMenuItemStatus(@PathVariable("menuItemId") Long menuItemId) {
         menuService.switchStatus(menuItemId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

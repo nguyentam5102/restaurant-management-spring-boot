@@ -21,12 +21,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorMessage> illegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+    @ExceptionHandler(ItemNotAvailableException.class)
+    public ResponseEntity<ErrorMessage> itemNotAvailableException(ItemNotAvailableException ex, WebRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),
                 new Date(),
-                "Invalid parameter value(s) passed",
+                ex.getMessage(),
                 request.getDescription(false));
 
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);

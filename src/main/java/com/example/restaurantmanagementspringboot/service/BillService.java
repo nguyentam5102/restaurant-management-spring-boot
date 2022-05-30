@@ -1,5 +1,6 @@
 package com.example.restaurantmanagementspringboot.service;
 
+import com.example.restaurantmanagementspringboot.exception.ItemNotAvailableException;
 import com.example.restaurantmanagementspringboot.exception.ResourceNotFoundException;
 import com.example.restaurantmanagementspringboot.model.Bill;
 import com.example.restaurantmanagementspringboot.model.BillDetail;
@@ -9,12 +10,12 @@ import com.example.restaurantmanagementspringboot.repository.BillDetailRepositor
 import com.example.restaurantmanagementspringboot.repository.BillRepository;
 import com.example.restaurantmanagementspringboot.repository.CustomerRepository;
 import com.example.restaurantmanagementspringboot.repository.MenuRepository;
+import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,11 +45,10 @@ public class BillService implements IBillService {
 
     @Transactional
     public Long addNewBill(Bill bill) {
-        // Generate bill's date and time
-        Bill newBill = new Bill(LocalDate.now(), LocalTime.now());
+
+        Bill newBill = new Bill(LocalDateTime.now());
         String phone = bill.getCustomer().getPhone();
 
-        // Find customer by phone, create new Customer if not found
         Optional<Customer> customer = customerRepository.findByPhone(phone);
         if (customer.isPresent())
             newBill.setCustomer(customer.get());
@@ -57,13 +57,10 @@ public class BillService implements IBillService {
             newBill.setCustomer(customerRepository.findByPhone(phone).get());
         }
 
-        // Fill bill details with information given from request
         List<BillDetail> newBillDetails = bill.getBillDetails();
         fillBillDetailsOfNewBill(newBill, newBillDetails);
 
         newBill.countTotal();
-
-        // Save bill
         Bill createdBill = billRepository.save(newBill);
         return createdBill.getId();
 
@@ -97,17 +94,19 @@ public class BillService implements IBillService {
 
     }
 
-    private void fillBillDetailsOfNewBill(Bill newBill, List<BillDetail> newBillDetails) throws ResourceNotFoundException {
+    private void fillBillDetailsOfNewBill(Bill newBill, List<BillDetail> newBillDetails) {
         for (BillDetail newBillDetail : newBillDetails) {
             newBillDetail.setBill(newBill);
             MenuItem menuItem = menuRepository.findById(newBillDetail.getMenuItem().getId()).orElseThrow((() -> new ResourceNotFoundException
                     ("Item with ID "
                             + newBillDetail.getMenuItem().getId() + " does not exist")));
-            newBillDetail.setMenuItem(menuItem);
-            newBill.addBillDetail(newBillDetail);
-            newBillDetail.countSubtotal();
+            if (menuItem.getStatus() == MenuItemStatus.DISABLED) {
+                newBillDetail.setMenuItem(menuItem);
+                newBill.addBillDetail(newBillDetail);
+                newBillDetail.countSubtotal();
+            } else
+                throw new ItemNotAvailableException("Menu item with ID " + menuItem.getId() + "is currently not available");
         }
     }
-
 
 }

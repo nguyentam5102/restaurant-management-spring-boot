@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/customer")
+@RequestMapping("api/customer")
 public class CustomerController {
 
     private final ICustomerService customerService;
@@ -21,19 +21,19 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping()
-    public List<Customer> getCustomers() {
-        return customerService.getCustomers();
+    @GetMapping("getCustomers")
+    public ResponseEntity<List<Customer>> getCustomers() {
+        return new ResponseEntity<>(customerService.getCustomers(), HttpStatus.OK);
     }
 
 
-    @GetMapping(path = "{customerId}")
+    @GetMapping(path = "getCustomerById/{customerId}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable("customerId") Long customerId) {
         return new ResponseEntity<>(customerService.getCustomerById(customerId), HttpStatus.OK);
     }
 
 
-    @GetMapping(path = "byPhone/{customerPhone}")
+    @GetMapping(path = "getCustomerByPhone/{customerPhone}")
     public ResponseEntity<Optional<Customer>> getCustomerByPhone(@PathVariable("customerPhone") String customerPhone) {
         return new ResponseEntity<>(customerService.getCustomerByPhone(customerPhone), HttpStatus.OK);
     }

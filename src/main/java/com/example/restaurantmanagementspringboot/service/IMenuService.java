@@ -9,9 +9,13 @@ public interface IMenuService {
 
     List<MenuItem> getMenuItems(String status);
 
+    List<MenuItem> getMenuItemsByType(String itemType);
+
     Long addNewMenuItem(MenuItem menuItem);
 
     void updateMenuItem(Long menuItemId, String description, Double price);
 
     void switchStatus(Long menuItemId);
+
+
 }

@@ -2,8 +2,7 @@ package com.example.restaurantmanagementspringboot.model;
 
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +17,7 @@ public class Bill {
     @Column(name = "bill_id")
     private Long id;
 
-    private LocalDate date;
-    private LocalTime time;
+    private LocalDateTime dateTime;
     private Double total;
 
     @ManyToOne
@@ -29,19 +27,11 @@ public class Bill {
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
     private List<BillDetail> billDetails = new ArrayList<>();
 
-    public Bill(LocalDate date, LocalTime time, Double total, List<BillDetail> billDetails) {
-        this.date = date;
-        this.time = time;
-        this.total = total;
-        this.billDetails = billDetails;
-    }
-
     public Bill() {
     }
 
-    public Bill(LocalDate date, LocalTime time) {
-        this.date = date;
-        this.time = time;
+    public Bill(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public void countTotal() {
@@ -60,20 +50,12 @@ public class Bill {
         this.id = id;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public Customer getCustomer() {

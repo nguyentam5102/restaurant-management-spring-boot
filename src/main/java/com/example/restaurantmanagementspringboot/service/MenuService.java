@@ -3,6 +3,7 @@ package com.example.restaurantmanagementspringboot.service;
 import com.example.restaurantmanagementspringboot.exception.ResourceNotFoundException;
 import com.example.restaurantmanagementspringboot.model.MenuItem;
 import com.example.restaurantmanagementspringboot.repository.MenuRepository;
+import com.example.restaurantmanagementspringboot.utils.ItemType;
 import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,11 @@ public class MenuService implements IMenuService {
             return menuRepository.findAll();
         return menuRepository.findByStatus(MenuItemStatus.valueOf(status.toUpperCase()));
 
-
     }
 
+    public List<MenuItem> getMenuItemsByType(String itemType) {
+        return menuRepository.findByType(ItemType.valueOf(itemType.toUpperCase()));
+    }
 
     public Long addNewMenuItem(MenuItem menuItem) {
         MenuItem createdMenuItem = menuRepository.save(menuItem);
@@ -45,14 +48,10 @@ public class MenuService implements IMenuService {
         MenuItem menuItem = menuRepository.findById(menuItemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with ID "
                         + menuItemId + " does not exist"));
-        if (description != null &&
-                description.length() > 0 &&
-                !Objects.equals(menuItem.getDescription(), description)) {
+        if (description != null && description.length() > 0 && !Objects.equals(menuItem.getDescription(), description)) {
             menuItem.setDescription(description);
         }
-        if (price != null &&
-                price > 0 &&
-                !Objects.equals(menuItem.getPrice(), price))
+        if (price != null && price > 0 && !Objects.equals(menuItem.getPrice(), price))
             menuItem.setPrice(price);
 
     }
