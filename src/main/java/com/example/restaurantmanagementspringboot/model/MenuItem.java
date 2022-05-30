@@ -5,6 +5,8 @@ import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +24,19 @@ public class MenuItem {
     )
     @Column(name = "menu_item_id")
     private Long id;
+
+    @NotNull(message = "type is mandatory, not null")
     private ItemType type;
+
+    @NotBlank(message = "name is mandatory")
     private String name;
+
+    @NotBlank(message = "description is mandatory")
     private String description;
+
     private String imgUrl;
+
+    @NotNull
     private Double price;
     private MenuItemStatus status = MenuItemStatus.ENABLED;
 

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BillService {
+public class BillService implements IBillService {
     private final BillRepository billRepository;
     private final MenuRepository menuRepository;
     private final CustomerRepository customerRepository;
@@ -37,6 +37,9 @@ public class BillService {
         return billRepository.findAll();
     }
 
+    public Optional<Bill> getBillById(Long billId) {
+        return billRepository.findById(billId);
+    }
 
     @Transactional
     public Long addNewBill(Bill bill) {
@@ -45,23 +48,18 @@ public class BillService {
         String phone = bill.getCustomer().getPhone();
 
         // Find customer by phone, create new Customer if not found
-        try {
-            Customer customer = customerRepository.findByPhone(phone).get();
-            newBill.setCustomer(customer);
-        } catch (Exception e) {
+        Optional<Customer> customer = customerRepository.findByPhone(phone);
+        if (customer.isPresent())
+            newBill.setCustomer(customer.get());
+        else {
             customerRepository.save(new Customer("Unnamed", phone));
             newBill.setCustomer(customerRepository.findByPhone(phone).get());
         }
 
         // Fill bill details with information given from request
         List<BillDetail> newBillDetails = bill.getBillDetails();
-        for (BillDetail newBillDetail : newBillDetails) {
-            newBillDetail.setBill(newBill);
-            MenuItem menuItem = menuRepository.getById(newBillDetail.getMenuItem().getId());
-            newBillDetail.setMenuItem(menuItem);
-            newBill.addBillDetail(newBillDetail);
-            newBillDetail.countSubtotal();
-        }
+        fillBillDetailsOfNewBill(newBill, newBillDetails);
+
         newBill.countTotal();
 
         // Save bill
@@ -94,7 +92,15 @@ public class BillService {
 
     }
 
-    public Optional<Bill> getBillById(Long billId) {
-        return billRepository.findById(billId);
+    private void fillBillDetailsOfNewBill(Bill newBill, List<BillDetail> newBillDetails) {
+        for (BillDetail newBillDetail : newBillDetails) {
+            newBillDetail.setBill(newBill);
+            MenuItem menuItem = menuRepository.getById(newBillDetail.getMenuItem().getId());
+            newBillDetail.setMenuItem(menuItem);
+            newBill.addBillDetail(newBillDetail);
+            newBillDetail.countSubtotal();
+        }
     }
+
+
 }

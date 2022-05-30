@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class MenuService {
+public class MenuService implements IMenuService {
     private final MenuRepository menuRepository;
 
     @Autowired
@@ -37,13 +37,6 @@ public class MenuService {
         return createdMenuItem.getId();
     }
 
-    public void deleteMenuItem(Long menuItemId) {
-        boolean exists = menuRepository.existsById(menuItemId);
-        if (!exists)
-            throw new EntityNotFoundException(
-                    "Item with ID " + menuItemId + " does not exist!");
-        menuRepository.deleteById(menuItemId);
-    }
 
     @Transactional
     public void updateMenuItem(Long menuItemId, String description, Double price) {

@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class CustomerService {
+public class CustomerService implements ICustomerService {
 
     private final CustomerRepository customerRepository;
 
@@ -24,6 +24,14 @@ public class CustomerService {
 
     public Optional<Customer> getCustomerById(Long customerId) {
         return customerRepository.findById(customerId);
+    }
+
+    public List<Customer> getCustomers() {
+        return customerRepository.findAll();
+    }
+
+    public Optional<Customer> getCustomerByPhone(String customerPhone) {
+        return customerRepository.findByPhone(customerPhone);
     }
 
     @Transactional
@@ -40,13 +48,5 @@ public class CustomerService {
                 !Objects.equals(customer.getPhone(), phone))
             customer.setPhone(phone);
         customer.setPhone(phone);
-    }
-
-    public List<Customer> getCustomers() {
-        return customerRepository.findAll();
-    }
-
-    public Optional<Customer> getCustomerByPhone(String customerPhone) {
-        return customerRepository.findByPhone(customerPhone);
     }
 }
