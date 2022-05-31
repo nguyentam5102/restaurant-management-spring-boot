@@ -1,18 +1,20 @@
 package com.example.restaurantmanagementspringboot.service;
 
 import com.example.restaurantmanagementspringboot.model.Bill;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface IBillService {
-    List<Bill> getBills();
+    ResponseEntity<List<Bill>> getBills();
 
-    Bill getBillById(Long billId);
+    ResponseEntity<Bill> getBillById(Long billId);
 
-    Long addNewBill(Bill bill);
+    ResponseEntity<HttpStatus> addNewBill(Bill bill);
 
-    void deleteBill(Long billId);
+    ResponseEntity<HttpStatus> deleteBill(Long billId);
 
-    void updateBillDetail(Long billId, Long menuItemId, Long newQuantity);
+    ResponseEntity<HttpStatus> updateBillDetail(Long billId, Long menuItemId, Long newQuantity);
 
 }

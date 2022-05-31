@@ -1,16 +1,17 @@
 package com.example.restaurantmanagementspringboot.service;
 
 import com.example.restaurantmanagementspringboot.model.Customer;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ICustomerService {
-    Customer getCustomerById(Long customerId);
+    ResponseEntity<Customer> getCustomerById(Long customerId);
 
-    List<Customer> getCustomers();
+    ResponseEntity<List<Customer>> getCustomers();
 
-    Optional<Customer> getCustomerByPhone(String customerPhone);
+    ResponseEntity<Customer> getCustomerByPhone(String customerPhone);
 
-    void updateCustomer(Long customerId, String name, String phone);
+    ResponseEntity<HttpStatus> updateCustomer(Long customerId, String name, String phone);
 }

@@ -12,6 +12,8 @@ import com.example.restaurantmanagementspringboot.repository.CustomerRepository;
 import com.example.restaurantmanagementspringboot.repository.MenuRepository;
 import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,17 +36,20 @@ public class BillService implements IBillService {
         this.billDetailRepository = billDetailRepository;
     }
 
-    public List<Bill> getBills() {
-        return billRepository.findAll();
+    public ResponseEntity<List<Bill>> getBills() {
+        return new ResponseEntity<>(billRepository.findAll(), HttpStatus.OK);
     }
 
-    public Bill getBillById(Long billId) {
-        return billRepository.findById(billId).orElseThrow(() ->
-                new ResourceNotFoundException("Bill with ID " + billId + " does not exist"));
+    public ResponseEntity<Bill> getBillById(Long billId) {
+        Optional<Bill> bill = billRepository.findById(billId);
+        if (bill.isPresent())
+            return new ResponseEntity<>(bill.get(), HttpStatus.OK);
+        else
+            throw new ResourceNotFoundException("Bill with ID " + billId + " does not exist");
     }
 
     @Transactional
-    public Long addNewBill(Bill bill) {
+    public ResponseEntity<HttpStatus> addNewBill(Bill bill) {
 
         Bill newBill = new Bill(LocalDateTime.now());
         String phone = bill.getCustomer().getPhone();
@@ -61,19 +66,20 @@ public class BillService implements IBillService {
         fillBillDetailsOfNewBill(newBill, newBillDetails);
 
         newBill.countTotal();
-        Bill createdBill = billRepository.save(newBill);
-        return createdBill.getId();
+        billRepository.save(newBill);
+        return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 
-    public void deleteBill(Long billId) {
+    public ResponseEntity<HttpStatus> deleteBill(Long billId) {
         billRepository.findById(billId).orElseThrow(() ->
                 new ResourceNotFoundException("Bill with ID " + billId + " does not exist")); // check if exists
         billRepository.deleteById(billId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional
-    public void updateBillDetail(Long billId, Long menuItemId, Long newQuantity) {
+    public ResponseEntity<HttpStatus> updateBillDetail(Long billId, Long menuItemId, Long newQuantity) {
         BillDetail billDetail = billDetailRepository.findBillDetailByBillIdAndMenuItemId(billId, menuItemId)
                 .orElseThrow(() -> new ResourceNotFoundException
                         ("Bill detail with Bill/Item IDs: " + billId + "/" + menuItemId
@@ -92,6 +98,7 @@ public class BillService implements IBillService {
         }
         billToUpdate.countTotal();
 
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private void fillBillDetailsOfNewBill(Bill newBill, List<BillDetail> newBillDetails) {
@@ -100,11 +107,12 @@ public class BillService implements IBillService {
             MenuItem menuItem = menuRepository.findById(newBillDetail.getMenuItem().getId()).orElseThrow((() -> new ResourceNotFoundException
                     ("Item with ID "
                             + newBillDetail.getMenuItem().getId() + " does not exist")));
-            if (menuItem.getStatus() == MenuItemStatus.DISABLED) {
+            if (menuItem.getStatus() == MenuItemStatus.ENABLED) {
                 newBillDetail.setMenuItem(menuItem);
                 newBill.addBillDetail(newBillDetail);
                 newBillDetail.countSubtotal();
-            } else
+            }
+            else
                 throw new ItemNotAvailableException("Menu item with ID " + menuItem.getId() + "is currently not available");
         }
     }

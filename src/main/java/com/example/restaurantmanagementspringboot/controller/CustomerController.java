@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/customer")
@@ -23,19 +22,19 @@ public class CustomerController {
 
     @GetMapping("getCustomers")
     public ResponseEntity<List<Customer>> getCustomers() {
-        return new ResponseEntity<>(customerService.getCustomers(), HttpStatus.OK);
+        return customerService.getCustomers();
     }
 
 
     @GetMapping(path = "getCustomerById/{customerId}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable("customerId") Long customerId) {
-        return new ResponseEntity<>(customerService.getCustomerById(customerId), HttpStatus.OK);
+        return customerService.getCustomerById(customerId);
     }
 
 
     @GetMapping(path = "getCustomerByPhone/{customerPhone}")
-    public ResponseEntity<Optional<Customer>> getCustomerByPhone(@PathVariable("customerPhone") String customerPhone) {
-        return new ResponseEntity<>(customerService.getCustomerByPhone(customerPhone), HttpStatus.OK);
+    public ResponseEntity<Customer> getCustomerByPhone(@PathVariable("customerPhone") String customerPhone) {
+        return customerService.getCustomerByPhone(customerPhone);
     }
 
     @PutMapping(path = "update/{customerId}")
@@ -44,8 +43,7 @@ public class CustomerController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String phone
     ) {
-        customerService.updateCustomer(customerId, name, phone);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return customerService.updateCustomer(customerId, name, phone);
     }
 
 

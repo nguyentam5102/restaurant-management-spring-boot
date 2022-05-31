@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -24,25 +22,22 @@ public class MenuController {
 
     @GetMapping("getItems")
     public ResponseEntity<List<MenuItem>> getMenuItems(@RequestParam(required = false) String status) {
-        return new ResponseEntity<>(menuService.getMenuItems(status), HttpStatus.OK);
+        return menuService.getMenuItems(status);
     }
 
     @GetMapping(path = "getItemById/{menuItemId}")
     public ResponseEntity<MenuItem> getMenuItemById(@PathVariable("menuItemId") Long menuItemId) {
-        return new ResponseEntity<>(menuService.getMenuItemById(menuItemId), HttpStatus.OK);
+        return menuService.getMenuItemById(menuItemId);
     }
 
     @GetMapping(path = "getItemByType/{itemType}")
     public ResponseEntity<List<MenuItem>> getMenuItemsByType(@PathVariable("itemType") String itemType) {
-        return new ResponseEntity<>(menuService.getMenuItemsByType(itemType), HttpStatus.OK);
+        return menuService.getMenuItemsByType(itemType);
     }
 
     @PostMapping
-    public ResponseEntity<Object> addNewMenuItem(@RequestBody MenuItem menuItem) {
-        Long menuItemId = menuService.addNewMenuItem(menuItem);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}").buildAndExpand(menuItemId).toUri();
-        return ResponseEntity.created(location).build();
+    public ResponseEntity<HttpStatus> addNewMenuItem(@RequestBody MenuItem menuItem) {
+        return menuService.addNewMenuItem(menuItem);
     }
 
     @PutMapping(path = "update/{menuItemId}")
@@ -50,18 +45,12 @@ public class MenuController {
             @PathVariable("menuItemId") Long menuItemId,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) Double price) {
-        try {
-            menuService.updateMenuItem(menuItemId, description, price);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception ex) {
-            throw new NumberFormatException();
-        }
+        return menuService.updateMenuItem(menuItemId, description, price);
     }
 
     @PutMapping(path = "switchItemStatusById/{menuItemId}")
     public ResponseEntity<HttpStatus> switchMenuItemStatus(@PathVariable("menuItemId") Long menuItemId) {
-        menuService.switchStatus(menuItemId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return menuService.switchStatus(menuItemId);
     }
 
 

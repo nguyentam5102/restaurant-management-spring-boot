@@ -4,6 +4,8 @@ import com.example.restaurantmanagementspringboot.exception.ResourceNotFoundExce
 import com.example.restaurantmanagementspringboot.model.Customer;
 import com.example.restaurantmanagementspringboot.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,22 +23,29 @@ public class CustomerService implements ICustomerService {
         this.customerRepository = customerRepository;
     }
 
-
-    public Customer getCustomerById(Long customerId) {
-        return customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Item with ID "
-                + customerId + " does not exist"));
+    public ResponseEntity<List<Customer>> getCustomers() {
+        return new ResponseEntity<>(customerRepository.findAll(), HttpStatus.OK);
     }
 
-    public List<Customer> getCustomers() {
-        return customerRepository.findAll();
+    public ResponseEntity<Customer> getCustomerById(Long customerId) {
+        Optional<Customer> customer = customerRepository.findById(customerId);
+        if (customer.isPresent())
+            return new ResponseEntity<>(customer.get(), HttpStatus.OK);
+        else
+        throw  new ResourceNotFoundException("Item with ID "
+                + customerId + " does not exist");
     }
 
-    public Optional<Customer> getCustomerByPhone(String customerPhone) {
-        return customerRepository.findByPhone(customerPhone);
-    }
+    public ResponseEntity<Customer> getCustomerByPhone(String customerPhone) {
+        Optional<Customer> customer = customerRepository.findByPhone(customerPhone);
+        if (customer.isPresent())
+            return new ResponseEntity<>(customer.get(), HttpStatus.OK);
+        else
+            throw  new ResourceNotFoundException("Item with ID "
+                    + customerPhone + " does not exist");    }
 
     @Transactional
-    public void updateCustomer(Long customerId, String name, String phone) {
+    public ResponseEntity<HttpStatus> updateCustomer(Long customerId, String name, String phone) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Customer with ID "
                 + customerId + " does not exist"));
         if (name != null &&
@@ -49,6 +58,7 @@ public class CustomerService implements ICustomerService {
                 !Objects.equals(customer.getPhone(), phone))
             customer.setPhone(phone);
         customer.setPhone(phone);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }
 }

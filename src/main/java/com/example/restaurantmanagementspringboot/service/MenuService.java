@@ -6,11 +6,14 @@ import com.example.restaurantmanagementspringboot.repository.MenuRepository;
 import com.example.restaurantmanagementspringboot.utils.ItemType;
 import com.example.restaurantmanagementspringboot.utils.MenuItemStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class MenuService implements IMenuService {
@@ -21,30 +24,33 @@ public class MenuService implements IMenuService {
         this.menuRepository = menuRepository;
     }
 
-    public MenuItem getMenuItemById(Long menuItemId) {
-        return menuRepository.findById(menuItemId).orElseThrow(() -> new ResourceNotFoundException("Item with ID"
-                + menuItemId + " does not exist"));
+    public ResponseEntity<MenuItem> getMenuItemById(Long menuItemId) {
+        Optional<MenuItem> menuItem = menuRepository.findById(menuItemId);
+        if (menuItem.isPresent())
+            return new ResponseEntity<>(menuItem.get(), HttpStatus.OK);
+        else throw new ResourceNotFoundException("Item with ID"
+                + menuItemId + " does not exist");
     }
 
-    public List<MenuItem> getMenuItems(String status) {
+    public ResponseEntity<List<MenuItem>> getMenuItems(String status) {
         if (status == null)
-            return menuRepository.findAll();
-        return menuRepository.findByStatus(MenuItemStatus.valueOf(status.toUpperCase()));
-
+            return new ResponseEntity<>(menuRepository.findAll(), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(menuRepository.findByStatus(MenuItemStatus.valueOf(status.toUpperCase())), HttpStatus.OK);
     }
 
-    public List<MenuItem> getMenuItemsByType(String itemType) {
-        return menuRepository.findByType(ItemType.valueOf(itemType.toUpperCase()));
+    public ResponseEntity<List<MenuItem>> getMenuItemsByType(String itemType) {
+        return new ResponseEntity<>(menuRepository.findByType(ItemType.valueOf(itemType.toUpperCase())), HttpStatus.OK);
     }
 
-    public Long addNewMenuItem(MenuItem menuItem) {
-        MenuItem createdMenuItem = menuRepository.save(menuItem);
-        return createdMenuItem.getId();
+    public ResponseEntity<HttpStatus> addNewMenuItem(MenuItem menuItem) {
+        menuRepository.save(menuItem);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
     @Transactional
-    public void updateMenuItem(Long menuItemId, String description, Double price) {
+    public ResponseEntity<HttpStatus> updateMenuItem(Long menuItemId, String description, Double price) {
         MenuItem menuItem = menuRepository.findById(menuItemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with ID "
                         + menuItemId + " does not exist"));
@@ -53,14 +59,15 @@ public class MenuService implements IMenuService {
         }
         if (price != null && price > 0 && !Objects.equals(menuItem.getPrice(), price))
             menuItem.setPrice(price);
-
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Transactional
-    public void switchStatus(Long menuItemId) {
+    public ResponseEntity<HttpStatus> switchStatus(Long menuItemId) {
         MenuItem menuItem = menuRepository.findById(menuItemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with ID "
                         + menuItemId + " does not exist"));
         menuItem.switchStatus();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

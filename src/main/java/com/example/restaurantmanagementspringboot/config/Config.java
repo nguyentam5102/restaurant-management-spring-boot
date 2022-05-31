@@ -27,7 +27,7 @@ public class Config {
                     "wine",
                     "wine.img",
                     60000.0,
-                    MenuItemStatus.DISABLED);
+                    MenuItemStatus.ENABLED);
 
             menuRepository.saveAll(
                     List.of(rice, wine)
